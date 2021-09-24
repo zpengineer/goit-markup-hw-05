@@ -17,6 +17,7 @@
     0px 2px 2px rgba(0, 0, 0, 0.12);
   --card-radius: 0px 0px 4px 4px;
   --card-set-gap: 30px;
+  --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
@@ -31,6 +32,17 @@ img {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
 }
 
 /* Утилиты */
@@ -87,7 +99,16 @@ img {
 /* Стили шапки сайта */
 
 .page-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  width: 100%;
+  min-height: 80px;
+
   border-bottom: 1px solid var(--border-color);
+  background-color: var(--white-color);
 }
 
 .main-nav {
@@ -120,11 +141,29 @@ img {
   padding-top: 32px;
   padding-bottom: 32px;
 
+  transition: color 250ms var(--timing-function);
+
   color: var(--title-text-color);
 }
 
 .site-nav .link.current {
+  position: relative;
+
   color: var(--accent-color);
+}
+
+.site-nav .link.current::after {
+  content: '';
+
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+
+  display: block;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background-color: var(--accent-color);
 }
 
 .site-nav .link:hover,
@@ -145,18 +184,19 @@ img {
 
   padding: 32px 0px 32px 0px;
 
-  fill: var(--primary-text-color);
   color: var(--primary-text-color);
+
+  transition: fill 250ms var(--timing-function), color 250ms var(--timing-function);
 }
 
 .site-contacts .link:hover,
 .site-contacts .link:focus {
   color: var(--accent-color);
-  fill: var(--accent-color);
 }
 
 .site-contacts .link-icon {
   margin-right: 10px;
+  fill: currentColor;
 }
 
 .site-nav .item:not(:last-child) {
@@ -249,13 +289,15 @@ img {
   margin-bottom: 9px;
 }
 
-.footer-social .social-block__link.test {
+.footer-social .social-block__link.social {
   background-color: rgba(255, 255, 255, 0.1);
   fill: var(--white-color);
+
+  transition: background-color 250ms var(--timing-function);
 }
 
-.footer-social .social-block__link.test:hover,
-.footer-social .social-block__link.test:focus {
+.footer-social .social-block__link.social:hover,
+.footer-social .social-block__link.social:focus {
   background-color: var(--icon-secondary-color);
 }
 
@@ -288,6 +330,66 @@ img {
   margin-bottom: 30px;
 
   color: var(--white-color);
+}
+
+/* Стили модального окна */
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+
+  opacity: 1;
+  transition: opacity 250ms var(--timing-function);
+}
+
+.backdrop.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.backdrop.is-hidden .modal {
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 250ms var(--timing-function);
+
+  min-width: 528px;
+  min-height: 581px;
+
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  background-color: var(--white-color);
+}
+
+.close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: start;
+
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  background-color: var(--white-color);
+
+  cursor: pointer;
 }
 
 /* Стили секции преимуществ */
@@ -372,6 +474,44 @@ img {
 
   /* outline: 2px solid green; */
 }
+
+.card-tumb {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+}
+
+.card-tumb::before {
+  content: '';
+  display: block;
+
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+  height: 70px;
+  background-color: rgba(47, 48, 58, 0.8);
+}
+
+.card-tumb > .label {
+  position: absolute;
+  left: 50%;
+  bottom: 27px;
+  transform: translate(-50%, 0);
+
+  width: 100%;
+
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.14;
+  text-align: center;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--white-color);
+}
+
 /* Стили секции команды */
 
 .team-cards {
@@ -410,6 +550,8 @@ img {
   width: 44px;
   height: 44px;
   border-radius: 50%;
+
+  transition: fill 250ms var(--timing-function), background-color 250ms var(--timing-function);
 }
 
 .social-block .social-item:not(:last-child) {
@@ -481,10 +623,10 @@ img {
   border: 1px solid var(--icon-primary-color);
   box-sizing: border-box;
   border-radius: 4px;
-}
 
-.clients-cards .link {
   fill: var(--icon-primary-color);
+
+  transition: border 250ms var(--timing-function), fill 250ms var(--timing-function);
 }
 
 .clients-cards .link:hover,
@@ -495,9 +637,51 @@ img {
 
 /* Страница портфолио */
 
-/* Стили секции примера работ */
+/* Оверлэй для карточек портфолио */
 
-.portfolio-cards {
+.portfolio-card {
+  width: 370px;
+}
+
+.portfolio-thumb {
+  position: relative;
+
+  overflow: hidden;
+}
+
+.portfolio-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  transform: translateY(100%);
+  transition: transform 250ms var(--timing-function);
+
+  padding: 63px 24px;
+  background-color: rgba(33, 150, 243, 0.9);
+}
+
+.overlay-text {
+  padding: 0;
+  margin: 0;
+
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.55;
+  letter-spacing: 0.03em;
+
+  color: rgb(255, 255, 255);
+}
+
+.portfolio-card:hover .portfolio-overlay {
+  transform: translateY(0);
+}
+
+/* Флекс для портфолио */
+
+.portfolio-list {
   display: flex;
   flex-wrap: wrap;
 
@@ -505,10 +689,12 @@ img {
   margin-top: calc(-1 * var(--card-set-gap));
 }
 
-.portfolio-cards > .item {
+.portfolio-list > .item {
   flex-basis: calc(100% / 3 - var(--card-set-gap));
   margin-left: var(--card-set-gap);
   margin-top: var(--card-set-gap);
+
+  transition: box-shadow 250ms var(--timing-function);
 }
 
 .portfolio-links {
@@ -521,19 +707,19 @@ img {
   margin-right: 8px;
 }
 
-.portfolio-cards .item {
+.portfolio-list .item {
   border: 1px solid var(--border-color);
 }
 
-.portfolio-cards .item:hover {
+.portfolio-list .item:hover {
   box-shadow: var(--card-shadow);
 }
 
-.portfolio-cards a {
+.portfolio-list a {
   text-decoration: none;
 }
 
-.portfolio-cards .card-content {
+.portfolio-list .card-content {
   display: block;
   padding: 20px 24px 20px 24px;
   text-align: left;
@@ -594,6 +780,9 @@ img {
 
   min-width: 73px;
   padding: 6px 32px;
+
+  transition: background-color 250ms var(--timing-function), color 250ms var(--timing-function),
+    box-shadow 250ms var(--timing-function);
 }
 
 .button.primary:hover,
@@ -615,6 +804,8 @@ img {
 
   min-width: 200px;
   padding: 10px 32px;
+
+  transition: background-color 250ms var(--timing-function);
 }
 
 .button.secondary:hover,
