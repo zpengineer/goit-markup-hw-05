@@ -645,7 +645,6 @@ h6 {
 
 .portfolio-thumb {
   position: relative;
-
   overflow: hidden;
 }
 
@@ -657,10 +656,16 @@ h6 {
   height: 100%;
 
   transform: translateY(100%);
-  transition: transform 250ms var(--timing-function);
+  visibility: hidden;
+  transition: transform 250ms var(--timing-function), visibility 250ms var(--timing-function);
 
   padding: 63px 24px;
   background-color: rgba(33, 150, 243, 0.9);
+}
+
+.portfolio-card:hover .portfolio-overlay {
+  transform: translateY(0);
+  visibility: visible;
 }
 
 .overlay-text {
@@ -673,10 +678,6 @@ h6 {
   letter-spacing: 0.03em;
 
   color: rgb(255, 255, 255);
-}
-
-.portfolio-card:hover .portfolio-overlay {
-  transform: translateY(0);
 }
 
 /* Флекс для портфолио */
